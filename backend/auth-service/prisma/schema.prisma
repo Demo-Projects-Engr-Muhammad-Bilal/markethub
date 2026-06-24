@@ -1,0 +1,44 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL") 
+}
+
+enum Role {
+  owner
+  admin
+  seller
+  dropshipper
+  customer
+}
+
+enum Status {
+  pending
+  approved
+  rejected
+  blocked
+}
+
+model User {
+  id                     String   @id @default(uuid())
+  username               String
+  email                  String   @unique
+  password_hash          String?  // 🟢 Made optional (added ?)
+  auth_provider          String   @default("local") // 🟢 New field ("local" or "google")
+  role                   Role     @default(customer)
+  phone_number           String?
+  status                 Status   @default(pending)
+  is_email_verified        Boolean  @default(false) // 🟢 New field
+  email_verification_token String?  // 🟢 New field
+  two_factor_secret      String?
+  two_factor_enabled     Boolean  @default(false)
+  reset_password_token   String?
+  reset_password_expires DateTime?
+  created_at             DateTime @default(now())
+  updated_at             DateTime @updatedAt
+  @@map("users")
+}
