@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
-    "module": "CommonJS",
+    "target": "ES2022",
+    "module": "NodeNext",        // 👈 Isay 'NodeNext' ya 'ESNext' set karein
+    "moduleResolution": "NodeNext", // 👈 Isay bhi 'NodeNext' set karein
     "rootDir": "./src",
     "outDir": "./dist",
     "esModuleInterop": true,
