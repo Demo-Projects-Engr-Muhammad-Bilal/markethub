@@ -8,12 +8,12 @@ import authRoutes from './routes/authRoutes.js';
 
 const app: Application = express();
 
-// 🟢 1. Extract allowed origins from the comma-separated .env variable
+// 1. Extract allowed origins from the comma-separated .env variable
 const allowedOrigins = process.env.ALLOWED_ORIGINS
   ? process.env.ALLOWED_ORIGINS.split(',')
   : [];
 
-// 🟢 2. Dynamic CORS Configuration
+// 2. Dynamic CORS Configuration (Fixed for Preflight OPTIONS Request)
 app.use(cors({
   origin: function (origin, callback) {
     // Agar origin missing hai (e.g., Postman ya server-to-server calls), tou allow karein
@@ -23,7 +23,8 @@ app.use(cors({
     if (allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
-      callback(new Error('CORS policy: This origin is not allowed.'));
+      // 🟢 FIX: Error throw karne ke bajaye 'false' pass karein taa ke pipeline crash na ho
+      callback(null, false);
     }
   },
   credentials: true, // Cookies/tokens bhejne ke liye zaroori hai
