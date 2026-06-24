@@ -5,7 +5,7 @@ import { GoogleOAuthProvider, useGoogleLogin } from "@react-oauth/google";
 import Image from "next/image";
 import { useState } from "react";
 import { toast } from "sonner";
-import { useConfig } from "../../../lib/context/ConfigContext"; 
+import { useConfig } from "../../../lib/context/ConfigContext";
 import { getAuthService } from "../../../lib/services/auth.service";
 import { MainViewProps } from "../../../lib/types/auth.types";
 import { SignInForm } from "../forms/SignInForm";
@@ -25,8 +25,6 @@ function GoogleSignInButton({ appRole, redirectUri }: { appRole: string; redirec
                                         const response = await authService.googleAuth(code, appRole.toLowerCase());
                                         localStorage.setItem("marketHub_token", response.token);
                                         toast.success(`Welcome, ${response.user?.username || "User"}!`);
-
-                                        // 🟢 Directs to '/' for Customer and '/dashboard' for others
                                         window.location.href = successRedirect;
                               } catch (error: any) {
                                         toast.error(error?.message || "Google Sign-In failed.");
@@ -57,14 +55,14 @@ function GoogleSignInButton({ appRole, redirectUri }: { appRole: string; redirec
 }
 
 export function MainView({
-          appName, logoSrc, 
+          appName, logoSrc,
           appRole, isLoading, setIsLoading, setView, setTempUserId, googleClientId, googleRedirectUri,
           onSetup2FA, tabParam, changeTab, hideSignUp
 }: MainViewProps) {
           return (
-                    <div className="animate-in fade-in zoom-in-95 duration-300 pt-8 lg:pt-5 flex flex-col justify-center items-start">
+                    <div className="animate-in fade-in zoom-in-95 duration-300 pt-8 lg:pt-5 flex flex-col items-center text-center lg:items-start lg:text-left">
 
-                              {/* 🟢 MOBILE LOGO VIEW (Centered, Only Logo) */}
+                              {/* MOBILE LOGO VIEW */}
                               <div className="lg:hidden flex items-center justify-center mb-8 w-full">
                                         {logoSrc ? (
                                                   <div className="relative h-10 flex items-center">
@@ -87,7 +85,8 @@ export function MainView({
                                         )}
                               </div>
 
-                              <div className="mb-8 text-center lg:text-left">
+                              {/* HEADING + SUBTEXT */}
+                              <div className="mb-8">
                                         <h2 className="text-3xl font-semibold mb-2">{appRole} Portal</h2>
                                         <p className="text-muted-foreground text-sm">
                                                   Log in to manage your {appRole.toLowerCase()} operations.
@@ -105,12 +104,12 @@ export function MainView({
                                                             >
                                                                       Sign In
                                                             </TabsTrigger>
-                                                                      <TabsTrigger
-                                                                                value="signup"
-                                                                                className="rounded-xl h-full text-base cursor-pointer transition-all border-transparent outline-none data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-md"
-                                                                      >
-                                                                                {appRole === "Customer" ? "Sign Up" : "Register"}
-                                                                      </TabsTrigger>
+                                                            <TabsTrigger
+                                                                      value="signup"
+                                                                      className="rounded-xl h-full text-base cursor-pointer transition-all border-transparent outline-none data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-md"
+                                                            >
+                                                                      {appRole === "Customer" ? "Sign Up" : "Register"}
+                                                            </TabsTrigger>
                                                   </TabsList>
                                         )}
 
