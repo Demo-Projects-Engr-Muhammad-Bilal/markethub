@@ -8,26 +8,30 @@ import authRoutes from './routes/authRoutes.js';
 
 const app: Application = express();
 
-// 1. Extract allowed origins from the comma-separated .env variable
+// 1. Extract allowed origins aur trim lagayein taa ke spaces ka namo-nishaan na rahe
 const allowedOrigins = process.env.ALLOWED_ORIGINS
-  ? process.env.ALLOWED_ORIGINS.split(',')
+  ? process.env.ALLOWED_ORIGINS.split(',').map(origin => origin.trim())
   : [];
 
-// 2. Dynamic CORS Configuration (Fixed for Preflight OPTIONS Request)
+// 🟢 Debug log lagayein taa ke Render logs mein pata chale backend ne kya load kiya
+console.log("🔒 Loaded Allowed Origins:", allowedOrigins);
+
+// 2. Dynamic CORS Configuration
 app.use(cors({
   origin: function (origin, callback) {
-    // Agar origin missing hai (e.g., Postman ya server-to-server calls), tou allow karein
+    // Agar origin missing hai (e.g., Postman ya health checks), tou allow karein
     if (!origin) return callback(null, true);
 
-    // Check karein ke origin hamari allowed list mein hai ya nahi
+    // 🟢 Debug log browser se aane wali incoming request dekhne ke liye
+    console.log(`📡 Incoming Origin: ${origin} | Allowed: ${allowedOrigins.includes(origin)}`);
+
     if (allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
-      // 🟢 FIX: Error throw karne ke bajaye 'false' pass karein taa ke pipeline crash na ho
-      callback(null, false);
+      callback(null, false); // pipeline crash nahi hogi
     }
   },
-  credentials: true, // Cookies/tokens bhejne ke liye zaroori hai
+  credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
