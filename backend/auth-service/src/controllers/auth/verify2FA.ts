@@ -27,8 +27,9 @@ export const verify2FA = async (req: Request, res: Response): Promise<any> => {
       return res.status(400).json({ success: false, message: 'Invalid 2FA code.' });
     }
 
+    // 🟢 Fix: Explicit typecasting lagayi hai taake Overload matches resolve ho sakein
     const token = jwt.sign({ id: user.id, role: user.role }, ENV.JWT_SECRET, {
-      expiresIn: ENV.JWT_EXPIRES_IN,
+      expiresIn: ENV.JWT_EXPIRES_IN as any,
     });
 
     return res.status(200).json({

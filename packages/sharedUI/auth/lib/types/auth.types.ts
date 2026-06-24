@@ -1,16 +1,16 @@
 export type AuthView = 'main' | '2fa' | 'forgot' | 'reset' | 'setup-2fa' | 'verify-email';
 
 export interface AuthPageProps {
-          apiUrl: string; // 🟢 Required from Parent App (Seller/Customer) to feed the Context Provider
+          apiUrl: string;
           appName?: string;
           appRole?: string;
           logoSrc?: string;
           googleClientId?: string;
           googleRedirectUri?: string;
           hideSignUp?: boolean;
-          leftPanelTitle?: string | React.ReactNode;
+          leftPanelTitle?: any;
           leftPanelSubtitle?: string;
-          leftPanelFeatures?: { icon: React.ElementType; text: string }[];
+          leftPanelFeatures?: { icon: any; text: string }[]; // 🟢 React.ElementType ki jagah 'any' use karein
 }
 
 export interface BaseAuthProps {
@@ -34,11 +34,12 @@ export interface ResetPasswordViewProps extends BaseAuthProps { }
 export interface LeftPanelProps {
           appName: string;
           appRole: string;
-          logoSrc?: string; // 🟢 Added logoSrc here
-          leftPanelTitle: string | React.ReactNode;
+          logoSrc?: string;
+          leftPanelTitle: any;
           leftPanelSubtitle: string;
-          leftPanelFeatures: { icon: React.ElementType; text: string }[];
+          leftPanelFeatures: { icon: any; text: string }[]; // 🟢 Here as well
 }
+
 
 export interface MainViewProps extends BaseAuthProps {
           appName: string;   // 🟢 Added
